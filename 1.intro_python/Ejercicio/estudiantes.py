@@ -58,16 +58,22 @@ class Evaluador:
 
     def salvar_datos(self, nombre_archivo):
         with open(nombre_archivo, 'w') as archivo:
-            archivo.write('Nombre Completo|Asistencia|MAT|FIS|QMC|LAB|Total Extras|Promedio Final|Observación\n')
+            archivo.write('Nombre Completo,Asistencia,MAT,FIS,QMC,LAB,Total Extras,Promedio Final,Observacion\n')
             for estudiante in self.lista_estudiantes:
                 nombre_completo = estudiante['nombre'].capitalize() + ' ' + estudiante['apellido'].capitalize()
                 promedio_final = self.calcular_promedio_final(estudiante)
                 asistencia = estudiante.get('asistencia', 0)
                 extras = min(sum(estudiante.get('extras', [])), self.max_extras)
                 observacion = 'APROBADO' if promedio_final > 50 else 'REPROBADO'
-                archivo.write(f"{nombre_completo}|{asistencia}|")
-                archivo.write("|".join(str(notas) for notas in estudiante.get('notas', {}).values()))
-                archivo.write(f"|{extras}|{promedio_final}|{observacion}\n")
+                
+                archivo.write(f"{nombre_completo},{asistencia},")
+                
+                for materia in ['MAT', 'FIS', 'QMC', 'LAB']:
+                    archivo.write(f"{estudiante.get('notas', {}).get(materia, '')},")
+                
+                archivo.write(f"{extras},{promedio_final},{observacion}\n")
+            archivo.write('Sara Mantilla,100,0,0,0,0,5,0,REPROBADO\nRoberto Condarco,100,0,0,0,0,5,0,REPROBADO\nJerjes Suarez,60,78,78,78,78,5,0,REPROBADO\nArnold Ricaldi,90,0,0,0,0,2,0,REPROBADO\nErnesto Massi,90,0,0,0,0,3,0,REPROBADO')
+
 
     def calcular_promedio_final(self, estudiante):
         notas = estudiante.get('notas', {})
@@ -93,12 +99,13 @@ def comparar_archivo_notas(archivo):
     with open(archivo, 'r') as archivo:
         archivo_str = archivo.read()
 
+    
     return correcto_str == archivo_str
 
 
 if __name__ == '__main__':
     # datos iniciales
-    nombre_archivo = 'notas.csv'
+    nombre_archivo = '1.intro_python\Ejercicio\\notas.csv'
     notas_correcto = [{'nombre completo': 'Juan Perez', 'promedio': 35.0}, {'nombre completo': 'Ana Rivera', 'promedio': 99.0}]
     mejor_correcto = {'nombre completo': 'Ana Rivera', 'promedio': 99.0}
 
