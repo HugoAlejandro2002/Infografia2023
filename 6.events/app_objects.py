@@ -2,13 +2,28 @@ import numpy as np
 import arcade
 import math
 
-
+   
 class Polygon2D:
     def __init__(self, vertices, color, rot_speed=0):
         self.vertices = vertices
         self.color = color
         self.rot_speed = rot_speed
 
+    @property
+    def left(self):
+        return min(vertex[0] for vertex in self.vertices)
+
+    @property
+    def right(self):
+        return max(vertex[0] for vertex in self.vertices)
+
+    @property
+    def bottom(self):
+        return min(vertex[1] for vertex in self.vertices)
+
+    @property
+    def top(self):
+        return max(vertex[1] for vertex in self.vertices)
     def translate(self, dx, dy):
         TM = np.array([
             [1, 0, dx], 
@@ -143,7 +158,7 @@ class Tank:
     
     def detect_collision_with_bullet(self, bullet):
         # Check if bullet is within the tank's body
-        if self.body.left < bullet.center_x < self.body.right and self.body.bottom < bullet.center_y < self.body.top:
+        if self.body.left < bullet[0] < self.body.right and self.body.bottom < bullet[1] < self.body.top:
             return True
         return False
     
@@ -176,7 +191,7 @@ class Enemy:
     
     def detect_collision_with_bullet(self, bullet):
         # Check if bullet is within the tank's body
-        if self.body.left < bullet.center_x < self.body.right and self.body.bottom < bullet.center_y < self.body.top:
+        if self.body.left < bullet[0] < self.body.right and self.body.bottom < bullet[1] < self.body.top:
             return True
         return False
     

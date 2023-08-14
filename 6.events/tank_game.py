@@ -48,6 +48,9 @@ class App(arcade.Window):
             self.tank1.speed = -SPEED
         if symbol == arcade.key.S:
             self.tank2.speed = -SPEED
+        
+        if symbol == arcade.key.SPACE:
+            self.tank2.shoot(20)
 
         if symbol == arcade.key.LEFT:
             self.tank1.angular_speed = 1.5
@@ -61,24 +64,39 @@ class App(arcade.Window):
     def on_key_release(self, symbol: int, modifiers: int):
         if symbol in (arcade.key.UP, arcade.key.DOWN, arcade.key.W, arcade.key.S):
             self.tank1.speed = 0
+            self.tank2.speed = 0
+
 
         if symbol in (arcade.key.LEFT, arcade.key.RIGHT, arcade.key.A, arcade.key.D):
             self.tank1.angular_speed = 0
+            self.tank2.angular_speed = 0
+
+
 
     def on_update(self, delta_time: float):
         self.tank1.update(delta_time)
         self.tank2.update(delta_time)
         for e in self.enemies:
             e.detect_collision(self.tank1)
+            
+        bullets_to_remove = []
         for bullet in self.tank1.bullets:
             if self.tank2.detect_collision_with_bullet(bullet):
                 self.tank1_score += 1
-                self.tank1.bullets.remove(bullet)
+                bullets_to_remove.append(bullet)
                 
+        for bullet in bullets_to_remove:
+            self.tank1.bullets.remove(bullet)
+
+        bullets_to_remove.clear()
         for bullet in self.tank2.bullets:
             if self.tank1.detect_collision_with_bullet(bullet):
                 self.tank2_score += 1
-                self.tank2.bullets.remove(bullet)
+                bullets_to_remove.append(bullet)
+                
+        for bullet in bullets_to_remove:
+            self.tank2.bullets.remove(bullet)
+
 
         
     def on_draw(self):
