@@ -17,7 +17,7 @@ class BresenhamWindow(arcade.Window):
     def on_draw(self):
         arcade.start_render()
 
-        points = get_line(30, 15, 5 ,5 )
+        points = get_line(5, 5, 30, 15)
         self.draw_grid()
         self.draw_line_points(points, arcade.color.DARK_YELLOW)
         self.draw_scaled_line(30, 15, 5, 5)

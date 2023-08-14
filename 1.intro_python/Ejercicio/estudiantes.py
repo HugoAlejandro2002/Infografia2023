@@ -27,85 +27,44 @@ estudiantes = [
 
 
 class Evaluador:
+    """Esta clase implementa diversas funciones para calcular promedios
+    de una lista de estudiantes y obtener otros datos adicionales, ademas,
+    tambien implementa una funcion para escribir un reporte de notas"""
     def __init__(self, lista_estudiantes, min_asistencia, max_extras):
         self.lista_estudiantes = lista_estudiantes
         self.min_asistencia = min_asistencia
         self.max_extras = max_extras
 
     def calcular_promedios(self):
+        # IMPLEMENTAR METODO
         lista_notas = []
-        for estudiante in self.lista_estudiantes:
-            notas = estudiante.get('notas', {})
-            if not notas or estudiante.get('asistencia', 0) < self.min_asistencia:
-                promedio_final = 0
-            else:
-                promedio_final = sum(notas.values()) / len(notas)
-
-            extras = min(sum(estudiante.get('extras', [])), self.max_extras)
-            promedio_final += extras
-
-            promedio_final = min(promedio_final, 100)
-
-            nombre_completo = estudiante['nombre'].capitalize() + ' ' + estudiante['apellido'].capitalize()
-            lista_notas.append({'nombre completo': nombre_completo, 'promedio': promedio_final})
-
         return lista_notas
 
     def obtener_mejor_estudiante(self):
-        promedios = self.calcular_promedios()
-        mejor_estudiante = max(promedios, key=lambda x: x['promedio'])
-        return mejor_estudiante
+        # IMPLEMENTAR METODO
+        return {'nombre completo': 'juan perez', 'promedio': 50}
 
     def salvar_datos(self, nombre_archivo):
-        with open(nombre_archivo, 'w') as archivo:
-            archivo.write('Nombre Completo,Asistencia,MAT,FIS,QMC,LAB,Total Extras,Promedio Final,Observacion\n')
-            for estudiante in self.lista_estudiantes:
-                nombre_completo = estudiante['nombre'].capitalize() + ' ' + estudiante['apellido'].capitalize()
-                promedio_final = self.calcular_promedio_final(estudiante)
-                asistencia = estudiante.get('asistencia', 0)
-                extras = min(sum(estudiante.get('extras', [])), self.max_extras)
-                observacion = 'APROBADO' if promedio_final > 50 else 'REPROBADO'
-                
-                archivo.write(f"{nombre_completo},{asistencia},")
-                
-                for materia in ['MAT', 'FIS', 'QMC', 'LAB']:
-                    archivo.write(f"{estudiante.get('notas', {}).get(materia, '')},")
-                
-                archivo.write(f"{extras},{promedio_final},{observacion}\n")
-            archivo.write('Sara Mantilla,100,0,0,0,0,5,0,REPROBADO\nRoberto Condarco,100,0,0,0,0,5,0,REPROBADO\nJerjes Suarez,60,78,78,78,78,5,0,REPROBADO\nArnold Ricaldi,90,0,0,0,0,2,0,REPROBADO\nErnesto Massi,90,0,0,0,0,3,0,REPROBADO')
+        # IMPLEMENTAR METODO
+        print('salvando datos')
 
-
-    def calcular_promedio_final(self, estudiante):
-        notas = estudiante.get('notas', {})
-        if not notas or estudiante.get('asistencia', 0) < self.min_asistencia:
-            promedio_final = 0
-        else:
-            promedio_final = sum(notas.values()) / len(notas)
-
-        extras = min(sum(estudiante.get('extras', [])), self.max_extras)
-        promedio_final += extras
-
-        promedio_final = min(promedio_final, 100)
-
-        return promedio_final
 
 # -----------------------------------------#
 # ----> NO MODIFICAR DESDE AQUI! <---------#
 # -----------------------------------------#
 def comparar_archivo_notas(archivo):
-    with open('1.intro_python\Ejercicio\ejemplo_notas.csv', 'r') as archivo_correcto:
+    with open('ejemplo_notas.csv', 'r') as archivo_correcto:
         correcto_str = archivo_correcto.read()
 
     with open(archivo, 'r') as archivo:
         archivo_str = archivo.read()
 
-    
     return correcto_str == archivo_str
 
 
 if __name__ == '__main__':
     # datos iniciales
-    nombre_archivo = '1.intro_python\Ejercicio\\notas.csv'
+    nombre_archivo = 'notas.csv'
     notas_correcto = [{'nombre completo': 'Juan Perez', 'promedio': 35.0}, {'nombre completo': 'Ana Rivera', 'promedio': 99.0}]
     mejor_correcto = {'nombre completo': 'Ana Rivera', 'promedio': 99.0}
 
